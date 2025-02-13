@@ -18,6 +18,9 @@ The application follows a multi-tier architecture, comprising the following laye
 
 - Data Access Layer: Manages database interactions and data storage.
 
+### Architectural Diagram
+![Secure Multi-Tier App drawio](https://github.com/user-attachments/assets/d1112461-359d-4056-bd35-ff3420d61775)
+
 
 ## Terraform Configuration
 This repository includes Terraform configuration files that use modules to create and deploy the multi-tier application across two environments: development and production. The Terraform scripts automate the provisioning of infrastructure and ensure consistency between environments.
