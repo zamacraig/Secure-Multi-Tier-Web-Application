@@ -3,6 +3,11 @@ variable "security_group_name" {
   type        = string
 }
 
+variable "security_group" {
+  description = "Security Group"
+  type        = string
+}
+
 variable "security_group_description" {
   description = "Security Group Description"
   type        = string

@@ -6,7 +6,7 @@ module "web" {
   instance_name       = "Web"
   instance_type       = var.instance_type
   security_group_name = module.security_group_web.security_group_name
-  subnet_id           = module.subnet_web.id
+  subnet_id           = module.subnet_web.subnet_id
 }
 
 module "app" {
@@ -16,7 +16,7 @@ module "app" {
   instance_name       = "App"
   instance_type       = var.instance_type
   security_group_name = module.security_group_app.security_group_name
-  subnet_id           = module.subnet_app.id
+  subnet_id           = module.subnet_app.subnet_id
 }
 
 module "db" {
@@ -42,7 +42,7 @@ module "subnet_web" {
   source = "../../Modules/subnet"
 
   vpc_id               = module.network.vpc_id
-  Availability_zone    = var.Availability_zone
+  Availability_zone    = var.availability_zone
   subnet_has_public_ip = true
   subnet_cidr          = "10.0.1.0/24"
   subnet_name          = "Web Subnet"
@@ -52,7 +52,7 @@ module "subnet_app" {
   source = "../../Modules/subnet"
 
   vpc_id            = module.network.vpc_id
-  Availability_zone = var.Availability_zone
+  Availability_zone = var.availability_zone
   subnet_cidr       = "10.0.2.0/24"
   subnet_name       = "App Subnet"
 }
@@ -61,7 +61,7 @@ module "subnet_db" {
   source = "../../Modules/subnet"
 
   vpc_id            = module.network.vpc_id
-  Availability_zone = var.Availability_zone
+  Availability_zone = var.availability_zone
   subnet_cidr       = "10.0.3.0/24"
   subnet_name       = "Database Subnet"
 }
@@ -79,7 +79,8 @@ module "internet_gateway" {
 module "security_group_web" {
   source = "../../Modules/securitygroup"
 
-  security_group_name        = "web_security_group"
+  security_group_name        = "Web Security Group"
+  security_group             = "web_security_group"
   security_group_description = "Web Security Group allows traffic to and from internet and internal network"
   vpc_id                     = module.network.vpc_id
   ingress_cidr               = var.internet_cidr
@@ -91,7 +92,8 @@ module "security_group_web" {
 module "security_group_app" {
   source = "../../Modules/securitygroup"
 
-  security_group_name        = "app_security_group"
+  security_group_name        = "App Security Group"
+  security_group             = "app_security_group"
   security_group_description = "App Security Group only allows traffic from Web Subnet"
   vpc_id                     = module.network.vpc_id
   ingress_cidr               = module.subnet_web.subnet_cidr
@@ -103,8 +105,9 @@ module "security_group_app" {
 module "security_group_db" {
   source = "../../Modules/securitygroup"
 
-  security_group_name        = "web_security_group"
-  security_group_description = "Web Security Group only allows traffic from App Subnet"
+  security_group_name        = "Database Security Group"
+  security_group             = "db_security_group"
+  security_group_description = "Database Security Group only allows traffic from App Subnet"
   vpc_id                     = module.network.vpc_id
   ingress_cidr               = module.subnet_app.subnet_cidr
   egress_cidr                = module.subnet_app.subnet_cidr

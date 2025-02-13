@@ -13,8 +13,12 @@ resource "aws_route_table" "public" {
   }
 }
 
+locals {
+  public_subnet_map = { for idx, val in var.public_subnet_ids : idx => val }
+}
+
 resource "aws_route_table_association" "main" {
-  for_each       = var.public_subnet_ids
-  subnet_id      = each.value
+  for_each = local.public_subnet_map
   route_table_id = aws_route_table.public.id
+  subnet_id      = each.value
 }

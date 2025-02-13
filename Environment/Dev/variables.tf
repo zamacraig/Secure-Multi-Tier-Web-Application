@@ -1,4 +1,4 @@
-variable "Availability_zone" {
+variable "availability_zone" {
   description = "Availability Zone"
   type        = string
 }
